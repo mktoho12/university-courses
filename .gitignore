@@ -1,0 +1,36 @@
+# ============================================================
+#  著作物（先生の教材）を公開リポジトリに含めない
+#  → これらは各端末で ZEN Study から取り直す運用
+# ============================================================
+
+# 公共哲学：スライド画像と、その逐語書き起こし
+public-philosophy/**/slides/
+public-philosophy/**/section*.md
+
+# 解析学1：教材本文と教材画像
+analysis-1/**/material.md
+analysis-1/**/images/
+
+# ルートの教材画像
+2026toho22_png.png
+
+# ============================================================
+#  環境・生成物
+# ============================================================
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.venv/
+
+# Obsidian のワークスペース状態（端末ごとに異なる。設定本体は同期する）
+.obsidian/workspace.json
+
+# macOS
+.DS_Store
+
+# Claude Code のセッション一時ファイル
+.claude/scheduled_tasks.lock
+.claude/**/*.lock
