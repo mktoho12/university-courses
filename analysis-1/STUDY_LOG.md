@@ -130,6 +130,16 @@ agent-browser --session-name nnn eval "$(cat extract.js)"
   - s6 対数微分 movies/44948942342（例題3-6-1,2／問題3-6-3）
   - ⚠️**要検算（サブエージェント指摘）**：問題3-6-3（f(x)=√(x+2)·(x+1)³）の教材解答、第1項の分子が元テキスト `(x+3)³` になっていた疑い。material.md では `(x+1)³` に訂正して注記済。学習時に本人が検算して確定する。
   - 📌 chapterId 探索メモ：SPA目次は本人認証モーダルに阻まれ辿れず。アプリJSバンドルの API endpoint（`/v2/material/courses/{id}?revision=1` 等、host `papi.nnn.ed.nico/prod`）を保存セッション cookie で直叩きして全chapter/movieツリー取得＝この手が今後も有効。
+
+### 確認テスト（exercise）の取得手順（2026-07-15 確立・サブエージェント実証）
+「確認テスト」は movie とは別ノードで **`resource_type: exercise`**。取得は次の順で成功した：
+1. **チャプター詳細API**を叩く：`https://papi.nnn.ed.nico/prod/v2/material/courses/52138186/chapters/<chapterId>?revision=1`。返る `sections[]` に movie と exercise が交互に並び、各 exercise ノードに `id` / `title` / `content_url` / `total_question` / `passed` / `done` がある。※トップレベルAPI（`/courses/{id}?revision=1`）は**chapter一覧のみ**で子ノードは出ない＝必ず chapters/<id> の詳細を叩く。
+2. exercise 本体URL＝**`https://www.nnn.ed.nico/contents/courses/52138186/chapters/<chapterId>/exercises/<exerciseId>?content_type=zen_univ`**。
+3. **躓き①**：`tools/fetch.sh` は DOM抽出器（extract3.js）を通すので**生JSON APIには `[]` を返す**。→ **agent-browser の `eval` でログイン済みセッション（nnn）から `fetch(url,{credentials:'include'})` を直叩き**して回避。
+4. **躓き②**：exercise本体の papi API（v1/v2 各パターン）は**全て404**。→ content_url を**ブラウザで開いて描画**し、`script[type="math/tex"]`（MathJax v2 の生LaTeX）の textContent を拾う。1問なら 問題1＋選択肢4＝計5個。
+5. **正解は取得できない＝正しい挙動**（本人確認）。ラジオは `value=1〜4` のみで正解フラグ非埋め込み。採点は送信＝状態変更が要る（GET専用制約で踏まない）。学習サイトとして当然。
+- ch03 配下の exercise ノードID（今後の参照用）：はじめに 47075995721 / 関数の合成 55368521082 / 合成関数の微分 53923058813 / 逆関数 36073086506 / 逆関数の微分 27123642926 / **対数微分 75446271158** / 合成関数の微分 確認レポート(report) 71004851796
+- **s6「対数微分 確認テスト」(75446271158) の内容**：問題 f(x)=(x+1)²/(√(x+2)(x+3)²) の導関数。4択とも第1項 2(x+1)/(√(x+2)(x+3)²) 共通、第2・第3項の符号だけ違う。対数微分すると log f=2log(x+1)−½log(x+2)−2log(x+3) → 第2・第3項ともマイナス＝**選択肢②が正**（サイトの解答キーではなく導出）。本人は未回答のまま保留（答えは伏せて提示済）。
 - セッションが切れたら：公共哲学の `../public-philosophy/STUDY_LOG.md`「セッションが切れたら」手順を流用（実機Chromeでログイン、op://Personal/ZEN ID）。
 
 ---
