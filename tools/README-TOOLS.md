@@ -16,7 +16,12 @@ README-TOOLS.md   このファイル
 ## 1. 前提ツール：agent-browser のインストール
 
 `agent-browser` は AI 用のブラウザ自動化 CLI（Apache-2.0, npm 公開）。
-**Mac も WSL も入れられる。**
+**Mac も WSL もネイティブ Linux も入れられる。**
+
+> 📎 **環境別のゼロからの構築手順＋躓きポイント集**は別ファイルにある（新しい端末はこちらが近道）：
+> - ネイティブ Linux（Ubuntu/GNOME 等）… `tools/LINUX-SETUP-NOTES.md`
+>   （Node は nvm・agent-browser の session 指定・**op の setgid グループ**等の落とし穴を網羅）
+> - Windows WSL … `tools/WSL-SETUP-NOTES.md`
 
 ### Mac
 ```bash
